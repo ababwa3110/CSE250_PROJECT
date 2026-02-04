@@ -2,7 +2,7 @@ A full-stack Visitor Management System built to securely track visitor entries a
 
 # Features
 
-Visitor Check-In: simple digital form to capture Name, Phone, Host Name, and Purpose.
+Visitor Check-In: simple digital form to input Name, Phone, Host Name, and Purpose.
 
 Real-Time Admin Dashboard: View all active visitors and historical logs.
 
