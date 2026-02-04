@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+</head>
+<body>
+
+<div id="login-screen">
+    <h2>Admin Access</h2>
+    <form onsubmit="handleLogin(event)">
+        <input type="password" id="passwordInput" placeholder="Password" required autofocus>
+        <button type="submit">Login</button>
+    </form>
+    <p>
+        <a href="/">Back to Check-In</a>
+    </p>
+</div>
+
+<div id="dashboard" style="display: none;">
+    <p>
+        <a href="/">Back to Check-In</a>
+    </p>
+
+    <h1>Visitor Log</h1>
+
+    <button onclick="clearList()">Clear List</button>
+
+    <br><br>
+
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>To Visit</th>
+            <th>Purpose</th>
+            <th>Entry Time (IST)</th>
+            <th>Exit Time</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<script>
+    let password = "";
+
+    async function handleLogin(e) {
+        e.preventDefault();
+        password = document.getElementById('passwordInput').value;
+        await load(true);
+    }
+
+    function formatTime(timeString) {
+        if (!timeString) return '';
+        const date = new Date(timeString);
+        return date.toLocaleString('en-IN', {
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: 'numeric', minute: 'numeric', hour12: true
+        });
+    }
+
+    async function load(isLoginAttempt = false) {
+        try {
+            const res = await fetch('http://localhost:3000/api/visitors', {
+                headers: { 'admin-password': password }
+            });
+
+            if (res.status === 401) {
+                if (isLoginAttempt) alert("Wrong Password!");
+                return;
+            }
+
+            // UI Logic: Switch from Login to Dashboard using raw display styles
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+
+            const data = await res.json();
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" align="center">No records found.</td></tr>';
+                return;
+            }
+
+            data.forEach(v => {
+                let actionHtml = v.exit_time ? formatTime(v.exit_time) : `<button onclick="signOut(${v.id})">Sign Out</button>`;
+
+                const row = `<tr>
+                        <td>${v.name}</td>
+                        <td>${v.phone}</td>
+                        <td>${v.host_name}</td>
+                        <td>${v.purpose}</td>
+                        <td>${formatTime(v.entry_time)}</td>
+                        <td>${actionHtml}</td>
+                    </tr>`;
+                tbody.innerHTML += row;
+            });
+        } catch (err) {
+            console.error(err);
+            if (isLoginAttempt) alert("Cannot connect to server.");
+        }
+    }
+
+    async function signOut(id) {
+        if(!confirm("Sign out this visitor?")) return;
+        await fetch(`http://localhost:3000/api/exit/${id}`, { method: 'PUT' });
+        load();
+    }
+
+    async function clearList() {
+        if(!confirm("Delete ALL records?")) return;
+        await fetch('http://localhost:3000/api/visitors', {
+            method: 'DELETE',
+            headers: { 'admin-password': password }
+        });
+        load();
+    }
+</script>
+</body>
+</html>
