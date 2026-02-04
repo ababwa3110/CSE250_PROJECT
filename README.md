@@ -10,6 +10,16 @@ Secure Sign-Out: Admins can mark visitors as "Signed Out" with a single click.
 
 Input Validation: Enforces 10-digit phone numbers and required fields.
 
+# Tech Stack
+
+Frontend: HTML5, JavaScript (ES6 Modules), Vite
+
+Backend: Node.js, Express.js
+
+Database: MariaDB (SQL)
+
+Tools: HeidiSQL (DB Management), IntelliJ IDEA
+
 # Prerequisites
 
 Before running this project, ensure you have the following installed:
