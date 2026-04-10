@@ -11,11 +11,11 @@
 <div class="bg-white shadow-xl rounded-2xl w-full max-w-md p-8">
 
     <div class="text-center mb-8">
-        <h1 class="text-3xl font-extrabold text-gray-900">Welcome</h1>
+        <h2 class="text-3xl font-extrabold text-gray-900">Welcome</h2>
         <p class="text-gray-500">Please enter your details to check-in</p>
     </div>
 
-    <form action="#" method="POST" class="space-y-5">
+    <form id="logForm" action="#" method="POST" class="space-y-5">
 
         <div>
             <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
@@ -72,9 +72,9 @@
 </div>
 
 <script>
-    // Coordinates for Ahmedabad center (Update these to your exact college/office location!)
+    // --- Day 4: Geofencing Logic ---
     const officeCoords = { lat: 23.0225, lng: 72.5714 };
-    const maxDistance = 0.5; // Represents roughly a 500 meter radius (using a simplified math approximation)
+    const maxDistance = 0.5; // roughly 500 meters
 
     function checkLocation() {
         if (navigator.geolocation) {
@@ -83,12 +83,9 @@
                     const userLat = position.coords.latitude;
                     const userLng = position.coords.longitude;
 
-                    // Simplified distance calculation (Pythagorean theorem approximation for short distances)
-                    // Note: For a real $12M ARR SaaS, you'd want to use the Haversine formula here!
                     const dist = Math.sqrt(Math.pow(userLat - officeCoords.lat, 2) + Math.pow(userLng - officeCoords.lng, 2));
 
                     if (dist > maxDistance) {
-                        // Show error and disable button
                         document.getElementById('geo-error').classList.remove('hidden');
                         const btn = document.getElementById('submit-btn');
                         btn.disabled = true;
@@ -98,16 +95,48 @@
                 },
                 (error) => {
                     console.warn("Geolocation error:", error.message);
-                    // Optional: Handle users who block location access here
                 }
             );
-        } else {
-            console.warn("Geolocation is not supported by this browser.");
         }
     }
 
-    // Run check on page load
     window.onload = checkLocation;
+
+    // --- Day 5: Form Submission & API Fetch Logic ---
+    const logForm = document.getElementById('logForm');
+
+    logForm.addEventListener('submit', async function(e) {
+        // Task 1: Prevent default reload
+        e.preventDefault();
+
+        // Gather data from inputs
+        const checkInData = {
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            host: document.getElementById('host').value,
+            purpose: document.getElementById('purpose').value
+        };
+
+        // Task 2: POST to backend
+        try {
+            const response = await fetch('/api/visit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(checkInData)
+            });
+
+            if (response.ok) {
+                console.log("Success: Check-in data saved to the database!");
+                // Note: You will add the UI success screen logic on Day 6
+            } else {
+                console.error("Error: Server rejected the submission.");
+            }
+        } catch (error) {
+            console.error("Network Error: Could not reach the backend.", error);
+        }
+    });
 </script>
 </body>
 </html>
