@@ -32,3 +32,12 @@ The visitor check-in flow works as follows:
 - On submit, the frontend uses the Fetch API to POST data to /api/visit
 - The backend validates and inserts the record into MariaDB
 - A success screen is shown to the visitor confirming check-in
+
+## Admin Dashboard Features
+
+- Password-protected admin login screen
+- Real-time table showing all active visitors
+- Displays visitor name, phone, host, purpose and entry time
+- Sign-Out button to mark a visitor as exited
+- Failed login attempts show an error message
+- Dashboard is hidden until correct password is entered
