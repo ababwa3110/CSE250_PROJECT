@@ -23,3 +23,12 @@ To prevent the "Off-Site Check-In" exploit (where visitors scan a shared picture
 The security guard dashboard is isolated and protected against unauthorized access.
 * **Frontend Isolation:** The dashboard utilizes a state-toggled UI container. The visitor log table remains unrendered until valid credentials are provided, preventing unauthorized shoulder-surfing or DOM inspection.
 * **Backend Authentication:** All sensitive API endpoints (e.g., `GET /api/visitors`, `PUT /api/exit/:id`) are shielded by a custom `requireAuth` middleware. This ensures that even if a user bypasses the frontend UI or attempts to hit the endpoints via Postman, the server will reject the request without a valid session token/password.
+* 
+* ## Self-Service Check-In Architecture
+
+The visitor check-in flow works as follows:
+- Visitor opens index.html on their device
+- They fill in their Name, Phone, Host Name and Purpose
+- On submit, the frontend uses the Fetch API to POST data to /api/visit
+- The backend validates and inserts the record into MariaDB
+- A success screen is shown to the visitor confirming check-in
