@@ -20,6 +20,31 @@ const pool = mariadb.createPool({
     connectionLimit: 5
 });
 
+async function initDB() {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        console.log("Connected to MariaDB successfully!");
+
+        await conn.query(`
+            CREATE TABLE IF NOT EXISTS visitors (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255),
+                phone VARCHAR(20),
+                host_name VARCHAR(255),
+                purpose TEXT,
+                entry_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+                exit_time DATETIME
+            )
+        `);
+    } catch (err) {
+        console.error("Error connecting to database:", err);
+    } finally {
+        if (conn) conn.release();
+    }
+}
+initDB();
+
 const requireAuth = (req, res, next) => {
     const password = req.headers['admin-password'];
     if (password === ADMIN_PASSWORD) {
@@ -28,22 +53,3 @@ const requireAuth = (req, res, next) => {
         res.status(401).json({ error: "Unauthorized" });
     }
 };
-
-app.post('/api/visit', async (req, res) => {
-    const { name, phone, host_name, purpose } = req.body;
-    let conn;
-    try {
-        conn = await pool.getConnection();
-
-        const sql = `INSERT INTO visitors (name, phone, host_name, purpose, entry_time)
-                     VALUES (?, ?, ?, ?, DATE_ADD(UTC_TIMESTAMP(), INTERVAL '05:30' HOUR_MINUTE))`;
-
-        const result = await conn.query(sql, [name, phone, host_name, purpose]);
-
-        res.json({ message: "Visitor Logged Successfully!", id: result.insertId.toString() });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    } finally {
-        if (conn) conn.release();
-    }
-});
