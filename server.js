@@ -1,0 +1,46 @@
+import express from 'express';
+import mariadb from 'mariadb';
+import cors from 'cors';
+
+const app = express();
+const PORT = 3000;
+const ADMIN_PASSWORD = "admin123";
+
+app.use(cors());
+app.use(express.json());
+
+// Serve files from the public directory
+app.use(express.static('public'));
+
+const pool = mariadb.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: 'shashwat3110',
+    database: 'visitor_log',
+    connectionLimit: 5
+});
+
+async function initDB() {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        console.log("Connected to MariaDB successfully!");
+
+        await conn.query(`
+            CREATE TABLE IF NOT EXISTS visitors (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255),
+                phone VARCHAR(20),
+                host_name VARCHAR(255),
+                purpose TEXT,
+                entry_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+                exit_time DATETIME
+            )
+        `);
+    } catch (err) {
+        console.error("Error connecting to database:", err);
+    } finally {
+        if (conn) conn.release();
+    }
+}
+initDB();
