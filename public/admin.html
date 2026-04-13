@@ -72,9 +72,11 @@
                 headers: { 'admin-password': adminPassword }
             });
             if (res.status === 401) return false;
+            const data = await res.json();
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
             return true;
         } catch (err) {
-            console.error("Error connecting to server:", err);
             return false;
         }
     }
