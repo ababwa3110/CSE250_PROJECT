@@ -47,6 +47,7 @@
 
 <script>
     let adminPassword = "";
+
     function formatTime(timeString) {
         if (!timeString) return '';
         const date = new Date(timeString);
@@ -55,14 +56,13 @@
             hour: 'numeric', minute: '2-digit', hour12: true
         });
     }
+
     async function handleLogin(e) {
         e.preventDefault();
         const input = document.getElementById('passwordInput');
         const errorDiv = document.getElementById('loginError');
-
         adminPassword = input.value;
         const success = await load(true);
-
         if (success) {
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('dashboardScreen').classList.remove('hidden');
@@ -84,22 +84,22 @@
             tbody.innerHTML = '';
             data.forEach(v => {
                 tbody.innerHTML += `<tr>
-                <td class="px-6 py-4 text-sm font-bold text-gray-900">${v.name}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">${v.phone}</td>
-                <td class="px-6 py-4 text-sm text-gray-900">${v.host_name}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">${v.purpose}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">${formatTime(v.entry_time)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                     <button onclick="signOut(${v.id})" class="bg-red-50 text-red-600 hover:bg-red-100 font-medium py-1.5 px-4 rounded-md border border-red-200 text-sm">Sign Out</button>
-
-                </td>
-            </tr>`;
+                    <td class="px-6 py-4 text-sm font-bold text-gray-900">${v.name}</td>
+                    <td class="px-6 py-4 text-sm text-gray-600">${v.phone}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">${v.host_name}</td>
+                    <td class="px-6 py-4 text-sm text-gray-600">${v.purpose}</td>
+                    <td class="px-6 py-4 text-sm text-gray-600">${formatTime(v.entry_time)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button onclick="signOut(${v.id})" class="bg-red-50 text-red-600 hover:bg-red-100 font-medium py-1.5 px-4 rounded-md border border-red-200 text-sm">Sign Out</button>
+                    </td>
+                </tr>`;
             });
             return true;
         } catch (err) {
             return false;
         }
     }
+
     async function signOut(id) {
         if(!confirm("Mark this visitor as signed out?")) return;
         try {
