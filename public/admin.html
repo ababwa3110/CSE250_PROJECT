@@ -75,6 +75,18 @@
             const data = await res.json();
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
+            data.forEach(v => {
+                tbody.innerHTML += `<tr>
+                <td class="px-6 py-4 text-sm font-bold text-gray-900">${v.name}</td>
+                <td class="px-6 py-4 text-sm text-gray-600">${v.phone}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">${v.host_name}</td>
+                <td class="px-6 py-4 text-sm text-gray-600">${v.purpose}</td>
+                <td class="px-6 py-4 text-sm text-gray-600">${v.entry_time}</td>
+                <td class="px-6 py-4 text-right text-sm">
+                    <button onclick="signOut(${v.id})" class="bg-red-50 text-red-600 font-medium py-1.5 px-4 rounded-md border border-red-200 text-sm">Sign Out</button>
+                </td>
+            </tr>`;
+            });
             return true;
         } catch (err) {
             return false;
