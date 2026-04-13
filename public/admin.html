@@ -47,7 +47,14 @@
 
 <script>
     let adminPassword = "";
-
+    function formatTime(timeString) {
+        if (!timeString) return '';
+        const date = new Date(timeString);
+        return date.toLocaleString('en-IN', {
+            day: '2-digit', month: 'short',
+            hour: 'numeric', minute: '2-digit', hour12: true
+        });
+    }
     async function handleLogin(e) {
         e.preventDefault();
         const input = document.getElementById('passwordInput');
@@ -81,7 +88,7 @@
                 <td class="px-6 py-4 text-sm text-gray-600">${v.phone}</td>
                 <td class="px-6 py-4 text-sm text-gray-900">${v.host_name}</td>
                 <td class="px-6 py-4 text-sm text-gray-600">${v.purpose}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">${v.entry_time}</td>
+                <td class="px-6 py-4 text-sm text-gray-600">${formatTime(v.entry_time)}</td>
                 <td class="px-6 py-4 text-right text-sm">
                     <button onclick="signOut(${v.id})" class="bg-red-50 text-red-600 font-medium py-1.5 px-4 rounded-md border border-red-200 text-sm">Sign Out</button>
                 </td>
