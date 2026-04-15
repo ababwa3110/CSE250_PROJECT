@@ -3,10 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visitor Check-in</title>
+    <title>Visitor Check-In</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center p-4">
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4 font-sans text-gray-800">
+
+<div id="formContainer" class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border border-gray-100">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-blue-600 mb-2">Welcome</h1>
+        <p class="text-gray-500">Please enter your details to register your visit.</p>
+    </div>
+
+    <div id="errorMessage" class="hidden bg-red-50 text-red-700 p-3 rounded-lg mb-6 text-sm font-medium text-center"></div>
+
+    <form id="logForm" class="space-y-5">
+        <div>
+            <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
+            <input type="text" id="name" placeholder="Enter your full name" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+        </div>
+
+        <div>
+            <label for="phone" class="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
+            <input type="tel" id="phone" placeholder="10-digit mobile number" required pattern="[0-9]{10}" maxlength="10"
+                   title="Please enter exactly 10 digits"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+        </div>
+
+        <div>
+            <label for="host_name" class="block text-sm font-semibold text-gray-700 mb-1">Person to Visit</label>
+            <input type="text" id="host_name" placeholder="Name of the host/student" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+        </div>
+
+        <div>
+            <label for="purpose" class="block text-sm font-semibold text-gray-700 mb-1">Purpose of Visit</label>
+            <input type="text" id="purpose" placeholder="Meeting, Delivery, etc." required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+        </div>
+
+        <button type="submit" id="submitBtn"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 mt-4 shadow-md">
+            Check In
+        </button>
+    </form>
+</div>
+
 <div id="successContainer" class="hidden bg-white p-10 rounded-2xl shadow-xl max-w-md w-full text-center border border-gray-100">
     <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
         <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -15,136 +58,78 @@
     </div>
     <h2 class="text-2xl font-bold text-gray-800 mb-3">Registration Complete</h2>
     <p class="text-gray-600 mb-8">Thank you. Your details have been sent to security. You may now proceed inside.</p>
-</div>
-<div class="bg-white shadow-xl rounded-2xl w-full max-w-md p-8">
 
-    <div class="text-center mb-8">
-        <h2 class="text-3xl font-extrabold text-gray-900">Welcome</h2>
-        <p class="text-gray-500">Please enter your details to check-in</p>
-    </div>
-
-    <form id="logForm" action="#" method="POST" class="space-y-5">
-
-        <div>
-            <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
-            <input type="text" id="name" name="name" placeholder="John Doe" required
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all">
-        </div>
-
-        <div>
-            <label for="phone" class="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
-            <input type="tel" id="phone" name="phone"
-                   placeholder="1234567890"
-                   required
-                   maxlength="10"
-                   pattern="[0-9]{10}"
-                   oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all">
-            <p class="text-xs text-gray-400 mt-1">10-digit mobile number only.</p>
-        </div>
-
-        <div>
-            <label for="host" class="block text-sm font-semibold text-gray-700 mb-1">Host Name</label>
-            <input type="text" id="host" name="host" placeholder="Who are you meeting?" required
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all">
-        </div>
-
-        <div>
-            <label for="purpose" class="block text-sm font-semibold text-gray-700 mb-1">Purpose of Visit</label>
-            <select id="purpose" name="purpose" required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all">
-                <option value="" disabled selected>Select a reason</option>
-                <option value="interview">Interview</option>
-                <option value="meeting">Business Meeting</option>
-                <option value="delivery">Delivery</option>
-                <option value="other">Other</option>
-            </select>
-        </div>
-
-        <div class="pt-4">
-            <button type="submit" id="submit-btn"
-                    class="w-full bg-green-600 text-white py-3 rounded-lg font-bold text-lg shadow-lg hover:bg-green-700 hover:shadow-xl transform active:scale-95 transition-all duration-200">
-                Check-in
-            </button>
-        </div>
-
-    </form>
-
-    <div class="mt-6 text-center">
-        <a href="admin.html" class="text-sm text-gray-400 hover:text-blue-500 transition-colors">Admin Portal</a>
-    </div>
-</div>
-
-<div id="geo-error" class="hidden fixed top-5 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full shadow-2xl z-50 whitespace-nowrap">
-    🚫 Access Denied: You must be on-site to check-in.
+    <button onclick="resetForm()" class="text-blue-600 font-semibold hover:text-blue-800 transition-colors">
+        Register another visitor
+    </button>
 </div>
 
 <script>
-    // --- Day 4: Geofencing Logic ---
-    const officeCoords = { lat: 23.0225, lng: 72.5714 };
-    const maxDistance = 0.5; // roughly 500 meters
+    const form = document.getElementById('logForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const formContainer = document.getElementById('formContainer');
+    const successContainer = document.getElementById('successContainer');
 
-    function checkLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const userLat = position.coords.latitude;
-                    const userLng = position.coords.longitude;
-
-                    const dist = Math.sqrt(Math.pow(userLat - officeCoords.lat, 2) + Math.pow(userLng - officeCoords.lng, 2));
-
-                    if (dist > maxDistance) {
-                        document.getElementById('geo-error').classList.remove('hidden');
-                        const btn = document.getElementById('submit-btn');
-                        btn.disabled = true;
-                        btn.classList.add('opacity-50', 'cursor-not-allowed');
-                        btn.classList.remove('hover:bg-green-700', 'hover:shadow-xl', 'active:scale-95');
-                    }
-                },
-                (error) => {
-                    console.warn("Geolocation error:", error.message);
-                }
-            );
-        }
+    function showError(msg) {
+        errorMessage.textContent = msg;
+        errorMessage.classList.remove('hidden');
     }
 
-    window.onload = checkLocation;
+    // Logic to reset the form and go back to initial state
+    function resetForm() {
+        form.reset();
+        successContainer.classList.add('hidden');
+        formContainer.classList.remove('hidden');
+        errorMessage.classList.add('hidden');
+    }
 
-    // --- Day 5: Form Submission & API Fetch Logic ---
-    const logForm = document.getElementById('logForm');
-
-    logForm.addEventListener('submit', async function(e) {
-        // Task 1: Prevent default reload
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        errorMessage.classList.add('hidden');
 
-        // Gather data from inputs
-        const checkInData = {
-            name: document.getElementById('name').value,
-            phone: document.getElementById('phone').value,
-            host: document.getElementById('host').value,
-            purpose: document.getElementById('purpose').value
+        const phoneVal = document.getElementById('phone').value;
+        if(phoneVal.length !== 10) {
+            showError('Phone number must be exactly 10 digits.');
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Processing...";
+        submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+
+        const data = {
+            name: document.getElementById('name').value.trim(),
+            phone: phoneVal,
+            host_name: document.getElementById('host_name').value.trim(),
+            purpose: document.getElementById('purpose').value.trim()
         };
 
-        // Task 2: POST to backend
         try {
             const response = await fetch('/api/visit', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(checkInData)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
             });
 
-            if (response.ok) {
-                console.log("Success: Check-in data saved to the database!");
-                // Note: You will add the UI success screen logic on Day 6
+            const result = await response.json();
+
+            if(response.ok) {
+                // Task 2: Switch views on success
+                formContainer.classList.add('hidden');
+                successContainer.classList.remove('hidden');
             } else {
-                console.error("Error: Server rejected the submission.");
+                showError(result.error || 'An error occurred during check-in.');
             }
         } catch (error) {
-            console.error("Network Error: Could not reach the backend.", error);
+            console.error(error);
+            showError('Server connection failed. Please check your network.');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Check In";
+            submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
         }
     });
 </script>
 </body>
-</html>
+</html>git add index.html
