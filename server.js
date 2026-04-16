@@ -1,5 +1,5 @@
 import express from 'express';
-import mariadb from 'mariadb';
+import * as mariadb from 'mariadb';
 import cors from 'cors';
 
 const app = express();
@@ -101,4 +101,22 @@ app.get('/api/visitors', requireAuth, async (req, res) => {
     } finally {
         if (conn) conn.release();
     }
+});
+
+app.delete('/api/visitors', requireAuth, async (req, res) => {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        await conn.query("TRUNCATE TABLE visitors");
+        res.json({ message: "All records deleted." });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    } finally {
+        if (conn) conn.release();
+    }
+});
+
+// IMPORTANT: Listening on 0.0.0.0 exposes the server to your local network
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Backend running on port ${PORT}. Ready for local network connections.`);
 });

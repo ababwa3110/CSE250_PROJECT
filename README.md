@@ -41,3 +41,8 @@ The application includes a secure Admin Dashboard designed for security personne
 - **Visitor Logs**: Access historical data of check-ins including names, contact details, and purpose of visit.
 - **Active Session Management**: Identify active visitors based on `check_out_time IS NULL` status.
 - **Data Integrity**: Securely fetched via protected API routes (`/api/visitors`).
+
+## Final Project Status
+- All Admin Dashboard features (Login, View, Sign-out, Clear) are functional.
+- Frontend-Backend integration via Fetch API is complete.
+- Security implemented via admin password headers.
