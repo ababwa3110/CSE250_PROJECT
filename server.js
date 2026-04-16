@@ -1,5 +1,5 @@
 import express from 'express';
-import mariadb from 'mariadb';
+import * as mariadb from 'mariadb';
 import cors from 'cors';
 
 const app = express();
