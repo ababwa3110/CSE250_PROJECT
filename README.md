@@ -35,9 +35,9 @@ The visitor check-in flow works as follows:
 
 ## Admin Dashboard Features
 
-- Password-protected admin login screen
-- Real-time table showing all active visitors
-- Displays visitor name, phone, host, purpose and entry time
-- Sign-Out button to mark a visitor as exited
-- Failed login attempts show an error message
-- Dashboard is hidden until correct password is entered
+The application includes a secure Admin Dashboard designed for security personnel and staff to manage building access.
+
+- **Real-time Monitoring**: View a live list of all visitors currently inside the premises.
+- **Visitor Logs**: Access historical data of check-ins including names, contact details, and purpose of visit.
+- **Active Session Management**: Identify active visitors based on `check_out_time IS NULL` status.
+- **Data Integrity**: Securely fetched via protected API routes (`/api/visitors`).
