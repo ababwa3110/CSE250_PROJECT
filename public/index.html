@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen p-4 font-sans text-gray-800">
 
-<div id="formContainer" class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border border-gray-100">
+<div id="formContainer" class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-md w-full border border-gray-100">
     <div class="text-center mb-8">
         <h1 class="text-3xl font-bold text-blue-600 mb-2">Welcome</h1>
         <p class="text-gray-500">Please enter your details to register your visit.</p>
@@ -19,38 +19,27 @@
     <form id="logForm" class="space-y-5">
         <div>
             <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
-            <input type="text" id="name" placeholder="Enter your full name" required
-                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+            <input type="text" id="name" placeholder="Enter your full name" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
         </div>
-
         <div>
             <label for="phone" class="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
-            <input type="tel" id="phone" placeholder="10-digit mobile number" required pattern="[0-9]{10}" maxlength="10"
-                   title="Please enter exactly 10 digits"
-                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+            <input type="tel" id="phone" placeholder="10-digit mobile number" required pattern="[0-9]{10}" maxlength="10" title="Please enter exactly 10 digits" oninput="this.value = this.value.replace(/[^0-9]/g,'')" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
         </div>
-
         <div>
             <label for="host_name" class="block text-sm font-semibold text-gray-700 mb-1">Person to Visit</label>
-            <input type="text" id="host_name" placeholder="Name of the host/student" required
-                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+            <input type="text" id="host_name" placeholder="Name of the host/student" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
         </div>
-
         <div>
             <label for="purpose" class="block text-sm font-semibold text-gray-700 mb-1">Purpose of Visit</label>
-            <input type="text" id="purpose" placeholder="Meeting, Delivery, etc." required
-                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+            <input type="text" id="purpose" placeholder="Meeting, Delivery, etc." required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
         </div>
-
-        <button type="submit" id="submitBtn"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 mt-4 shadow-md">
+        <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 mt-4 shadow-md">
             Check In
         </button>
     </form>
 </div>
 
-<div id="successContainer" class="hidden bg-white p-10 rounded-2xl shadow-xl max-w-md w-full text-center border border-gray-100">
+<div id="successContainer" class="hidden bg-white p-6 sm:p-10 rounded-2xl shadow-xl max-w-md w-full text-center border border-gray-100">
     <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
         <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -58,7 +47,6 @@
     </div>
     <h2 class="text-2xl font-bold text-gray-800 mb-3">Registration Complete</h2>
     <p class="text-gray-600 mb-8">Thank you. Your details have been sent to security. You may now proceed inside.</p>
-
     <button onclick="resetForm()" class="text-blue-600 font-semibold hover:text-blue-800 transition-colors">
         Register another visitor
     </button>
@@ -94,6 +82,7 @@
             return;
         }
 
+        // Disable button to prevent double submission
         submitBtn.disabled = true;
         submitBtn.textContent = "Processing...";
         submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
@@ -115,7 +104,7 @@
             const result = await response.json();
 
             if(response.ok) {
-                // Task 2: Switch views on success
+                // Switch views on success
                 formContainer.classList.add('hidden');
                 successContainer.classList.remove('hidden');
             } else {
@@ -125,11 +114,13 @@
             console.error(error);
             showError('Server connection failed. Please check your network.');
         } finally {
+            // Re-enable button after request is complete
             submitBtn.disabled = false;
             submitBtn.textContent = "Check In";
             submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
         }
     });
 </script>
+
 </body>
-</html>git add index.html
+</html>
