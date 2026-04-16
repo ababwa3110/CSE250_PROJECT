@@ -102,3 +102,16 @@ app.get('/api/visitors', requireAuth, async (req, res) => {
         if (conn) conn.release();
     }
 });
+
+app.delete('/api/visitors', requireAuth, async (req, res) => {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        await conn.query("TRUNCATE TABLE visitors");
+        res.json({ message: "All records deleted." });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    } finally {
+        if (conn) conn.release();
+    }
+});
