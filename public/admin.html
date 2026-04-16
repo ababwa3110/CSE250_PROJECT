@@ -26,6 +26,17 @@
 </div>
 
 <div id="dashboardScreen" class="hidden w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Active Visitor Log</h1>
+        <div class="flex space-x-3">
+            <button onclick="load(false)" class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm">
+                Refresh Now
+            </button>
+            <button onclick="clearList()" class="bg-red-50 border border-red-200 text-red-700 font-medium py-2 px-4 rounded-lg shadow-sm">
+                Clear Log
+            </button>
+        </div>
+    </div>
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -112,6 +123,15 @@
         } catch (e) {
             alert("Error connecting to server to sign out.");
         }
+    }
+
+    async function clearList() {
+        if(!confirm("WARNING: This will delete ALL history. Continue?")) return;
+        await fetch('/api/visitors', {
+            method: 'DELETE',
+            headers: { 'admin-password': adminPassword }
+        });
+        load(false);
     }
 </script>
 </body>
