@@ -72,3 +72,20 @@ app.post('/api/visit', async (req, res) => {
         if (conn) conn.release();
     }
 });
+
+app.put('/api/exit/:id', async (req, res) => {
+    const id = req.params.id;
+    let conn;
+    try {
+        conn = await pool.getConnection();
+
+        const sql = `UPDATE visitors SET exit_time = DATE_ADD(UTC_TIMESTAMP(), INTERVAL '05:30' HOUR_MINUTE) WHERE id = ?`;
+
+        await conn.query(sql, [id]);
+        res.json({ message: "Visitor Signed Out" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    } finally {
+        if (conn) conn.release();
+    }
+});
