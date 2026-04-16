@@ -1,138 +1,208 @@
-<!DOCTYPE html>
+[11:58 pm, 16/4/2026] Shashwat Au: <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <title>Visitor Check-In</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen font-sans text-gray-800">
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4 font-sans text-gray-800">
 
-<div id="loginScreen" class="flex items-center justify-center min-h-screen px-4">
-    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-sm w-full">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Security Login</h2>
-        <div id="loginError" class="hidden bg-red-50 text-red-600 p-3 rounded mb-4 text-sm text-center"></div>
-        <form onsubmit="handleLogin(event)" class="space-y-5">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Admin Password</label>
-                <input type="password" id="passwordInput" placeholder="Enter password" required autofocus
-                       class="w-full px-4 py-3 rounded-lg border border-gray-300 outline-none">
+<div id="formContainer" class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border border-gray-100">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-blue-600 mb-2">Welcome</h1>
+        <p class="text-gray-500">Please enter your details to register your visit.</p>
+    </div>
+
+    <div id="errorMessage" class="hidden bg-red-50 text-red-700 p-3 rounded-lg mb-6 text-sm font-medium text-cent…
+[11:59 pm, 16/4/2026] Shashwat Au: <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Visitor Check-In</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-50 flex items-center justify-center min-h-screen p-4 font-sans text-gray-800">
+
+    <div id="formContainer" class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border border-gray-100">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-blue-600 mb-2">Welcome</h1>
+            <p class="text-gray-500">Please enter your details to register your visit.</p>
+        </div>
+
+        <div id="errorMessage" class="hidden bg-red-50 text-red-700 p-3 rounded-lg mb-6 text-sm font-medium text-cent…
+[12:02 am, 17/4/2026] Shashwat Au: <!DOCTYPE html>
+<html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Security Dashboard</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+        </head>
+        <body class="bg-gray-100 min-h-screen font-sans text-gray-800">
+
+        <div id="loginScreen" class="flex items-center justify-center min-h-screen px-4">
+            <div class="bg-white p-8 rounded-2xl shadow-lg max-w-sm w-full">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Security Login</h2>
+                <div id="loginError" class="hidden bg-red-50 text-red-600 p-3 rounded mb-4 text-sm text-center"></div>
+                <form onsubmit="handleLogin(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Admin Password</label>
+                        <input type="password" id="passwordInput" placeholder="Enter password" required autofocus
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                        Access Dashboard
+                    </button>
+                </form>
             </div>
-            <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-lg">
-                Access Dashboard
-            </button>
-        </form>
-    </div>
-</div>
-
-<div id="dashboardScreen" class="hidden w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Active Visitor Log</h1>
-        <div class="flex space-x-3">
-            <button onclick="load(false)" class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm">
-                Refresh Now
-            </button>
-            <button onclick="clearList()" class="bg-red-50 border border-red-200 text-red-700 font-medium py-2 px-4 rounded-lg shadow-sm">
-                Clear Log
-            </button>
         </div>
-    </div>
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Visitor</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Contact</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Visiting</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Purpose</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase">Entry Time</th>
-                    <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase">Action</th>
-                </tr>
-                </thead>
-                <tbody id="tableBody" class="bg-white divide-y divide-gray-200"></tbody>
-            </table>
+
+        <div id="dashboardScreen" class="hidden w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Active Visitor Log</h1>
+                    <p id="lastUpdated" class="text-sm text-gray-500 mt-1">Status: Waiting for data...</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="load(false)" class="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium py-2 px-4 rounded-lg shadow-sm transition-colors">
+                        Refresh Now
+                    </button>
+                    <button onclick="clearList()" class="bg-red-50 border border-red-200 text-red-700 hover:bg-red-100 font-medium py-2 px-4 rounded-lg shadow-sm transition-colors">
+                        Clear Log
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Visitor</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Contact</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Visiting</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Purpose</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Entry Time</th>
+                            <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Rows injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<script>
-    let adminPassword = "";
-    let autoRefreshInterval = null;
+        <script>
+            let adminPassword = "";
+            let autoRefreshInterval = null;
 
-    function formatTime(timeString) {
-        if (!timeString) return '';
-        const date = new Date(timeString);
-        return date.toLocaleString('en-IN', {
-            day: '2-digit', month: 'short',
-            hour: 'numeric', minute: '2-digit', hour12: true
-        });
-    }
+            async function handleLogin(e) {
+                e.preventDefault();
+                const input = document.getElementById('passwordInput');
+                const errorDiv = document.getElementById('loginError');
 
-    async function handleLogin(e) {
-        e.preventDefault();
-        const input = document.getElementById('passwordInput');
-        const errorDiv = document.getElementById('loginError');
-        adminPassword = input.value;
-        const success = await load(true);
-        if (success) {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('dashboardScreen').classList.remove('hidden');
-            if (!autoRefreshInterval) {
-                autoRefreshInterval = setInterval(() => load(false), 10000);
+                adminPassword = input.value;
+                const success = await load(true);
+
+                if (success) {
+                    document.getElementById('loginScreen').classList.add('hidden');
+                    document.getElementById('dashboardScreen').classList.remove('hidden');
+
+                    // Start polling the server every 10 seconds automatically
+                    if (!autoRefreshInterval) {
+                        autoRefreshInterval = setInterval(() => load(false), 10000);
+                    }
+                } else {
+                    errorDiv.textContent = "Invalid Password";
+                    errorDiv.classList.remove('hidden');
+                    input.value = "";
+                }
             }
-        } else {
-            errorDiv.textContent = "Invalid Password";
-            errorDiv.classList.remove('hidden');
-            input.value = "";
-        }
-    }
 
-    async function load(isLoginAttempt = false) {
-        try {
-            const res = await fetch('/api/visitors', {
-                headers: { 'admin-password': adminPassword }
-            });
-            if (res.status === 401) return false;
-            const data = await res.json();
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-            data.forEach(v => {
-                tbody.innerHTML += `<tr>
-                    <td class="px-6 py-4 text-sm font-bold text-gray-900">${v.name}</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">${v.phone}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">${v.host_name}</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">${v.purpose}</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">${formatTime(v.entry_time)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button onclick="signOut(${v.id})" class="bg-red-50 text-red-600 hover:bg-red-100 font-medium py-1.5 px-4 rounded-md border border-red-200 text-sm">Sign Out</button>
-                    </td>
-                </tr>`;
-            });
-            return true;
-        } catch (err) {
-            return false;
-        }
-    }
+            function formatTime(timeString) {
+                if (!timeString) return '';
+                const date = new Date(timeString);
+                return date.toLocaleString('en-IN', {
+                    day: '2-digit', month: 'short',
+                    hour: 'numeric', minute: '2-digit', hour12: true
+                });
+            }
 
-    async function signOut(id) {
-        if(!confirm("Mark this visitor as signed out?")) return;
-        try {
-            await fetch(`/api/exit/${id}`, { method: 'PUT' });
-            load(false);
-        } catch (e) {
-            alert("Error connecting to server to sign out.");
-        }
-    }
+            async function load(isLoginAttempt = false) {
+                try {
+                    const res = await fetch('/api/visitors', {
+                        headers: { 'admin-password': adminPassword }
+                    });
 
-    async function clearList() {
-        if(!confirm("WARNING: This will delete ALL history. Continue?")) return;
-        await fetch('/api/visitors', {
-            method: 'DELETE',
-            headers: { 'admin-password': adminPassword }
-        });
-        load(false);
-    }
-</script>
-</body>
+                    if (res.status === 401) return false;
+
+                    const data = await res.json();
+                    const tbody = document.getElementById('tableBody');
+                    tbody.innerHTML = '';
+
+                    const now = new Date();
+                    document.getElementById('lastUpdated').textContent = Last auto-refresh: ${now.toLocaleTimeString()};
+
+                    if (data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">No visitors found.</td></tr>';
+                        return true;
+                    }
+
+                    data.forEach(v => {
+                        const isActive = !v.exit_time;
+
+                        const actionHtml = isActive
+                            ? <button onclick="signOut(${v.id})" class="bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 font-medium py-1.5 px-4 rounded-md transition-colors border border-red-200 text-sm">Sign Out</button>
+                            : <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Left at ${formatTime(v.exit_time)}</span>;
+
+                        const rowClass = isActive ? "bg-white" : "bg-gray-50 opacity-75";
+
+                        const row = `<tr class="${rowClass} hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-bold text-gray-900">${v.name}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${v.phone}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm font-medium text-gray-900">${v.host_name}</span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">${v.purpose}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${formatTime(v.entry_time)}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                ${actionHtml}
+                            </td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    });
+                    return true;
+                } catch (err) {
+                    console.error("Connection Error:", err);
+                    document.getElementById('lastUpdated').textContent = "Status: Disconnected. Retrying...";
+                    return false;
+                }
+            }
+
+            async function signOut(id) {
+                if(!confirm("Mark this visitor as signed out?")) return;
+                try {
+                    await fetch(/api/exit/${id}, { method: 'PUT' });
+                    load(false);
+                } catch (e) {
+                    alert("Error connecting to server to sign out.");
+                }
+            }
+
+            async function clearList() {
+                if(!confirm("WARNING: This will delete ALL history. Continue?")) return;
+                await fetch('/api/visitors', {
+                    method: 'DELETE',
+                    headers: { 'admin-password': adminPassword }
+                });
+                load(false);
+            }
+        </script>
+        </body>
 </html>
