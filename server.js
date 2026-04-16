@@ -89,3 +89,16 @@ app.put('/api/exit/:id', async (req, res) => {
         if (conn) conn.release();
     }
 });
+
+app.get('/api/visitors', requireAuth, async (req, res) => {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const rows = await conn.query("SELECT * FROM visitors ORDER BY entry_time DESC");
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    } finally {
+        if (conn) conn.release();
+    }
+});
