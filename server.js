@@ -115,3 +115,8 @@ app.delete('/api/visitors', requireAuth, async (req, res) => {
         if (conn) conn.release();
     }
 });
+
+// IMPORTANT: Listening on 0.0.0.0 exposes the server to your local network
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Backend running on port ${PORT}. Ready for local network connections.`);
+});
