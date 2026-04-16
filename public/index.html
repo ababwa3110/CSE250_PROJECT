@@ -16,30 +16,46 @@
 
     <div id="errorMessage" class="hidden bg-red-50 text-red-700 p-3 rounded-lg mb-6 text-sm font-medium text-center"></div>
 
+    <div id="geo-error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <strong class="font-bold">Access Denied!</strong>
+        <span class="block sm:inline" id="geo-error-text">You must be on campus to check in.</span>
+    </div>
+
     <form id="logForm" class="space-y-5">
         <div>
             <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
-            <input type="text" id="name" placeholder="Enter your full name" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+            <input type="text" id="name" placeholder="Enter your full name" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
         </div>
+
         <div>
             <label for="phone" class="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
-            <input type="tel" id="phone" placeholder="10-digit mobile number" required pattern="[0-9]{10}" maxlength="10" title="Please enter exactly 10 digits" oninput="this.value = this.value.replace(/[^0-9]/g,'')" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+            <input type="tel" id="phone" placeholder="10-digit mobile number" required pattern="[0-9]{10}" maxlength="10"
+                   title="Please enter exactly 10 digits"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
         </div>
+
         <div>
             <label for="host_name" class="block text-sm font-semibold text-gray-700 mb-1">Person to Visit</label>
-            <input type="text" id="host_name" placeholder="Name of the host/student" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+            <input type="text" id="host_name" placeholder="Name of the host/student" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
         </div>
+
         <div>
             <label for="purpose" class="block text-sm font-semibold text-gray-700 mb-1">Purpose of Visit</label>
-            <input type="text" id="purpose" placeholder="Meeting, Delivery, etc." required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+            <input type="text" id="purpose" placeholder="Meeting, Delivery, etc." required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
         </div>
-        <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 mt-4 shadow-md">
+
+        <button type="submit" id="submitBtn"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 mt-4 shadow-md">
             Check In
         </button>
     </form>
 </div>
 
-<div id="successContainer" class="hidden bg-white p-6 sm:p-10 rounded-2xl shadow-xl max-w-md w-full text-center border border-gray-100">
+<div id="successContainer" class="hidden bg-white p-10 rounded-2xl shadow-xl max-w-md w-full text-center border border-gray-100">
     <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
         <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -64,12 +80,15 @@
         errorMessage.classList.remove('hidden');
     }
 
-    // Logic to reset the form and go back to initial state
     function resetForm() {
         form.reset();
         successContainer.classList.add('hidden');
         formContainer.classList.remove('hidden');
         errorMessage.classList.add('hidden');
+
+        // Ensure form is visible again if geofencing passed previously
+        form.style.display = 'block';
+        document.getElementById('geo-error').classList.add('hidden');
     }
 
     form.addEventListener('submit', async (e) => {
@@ -82,7 +101,7 @@
             return;
         }
 
-        // Disable button to prevent double submission
+        // TASK 1 LOGIC: Disable button to prevent double submission
         submitBtn.disabled = true;
         submitBtn.textContent = "Processing...";
         submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
@@ -104,7 +123,6 @@
             const result = await response.json();
 
             if(response.ok) {
-                // Switch views on success
                 formContainer.classList.add('hidden');
                 successContainer.classList.remove('hidden');
             } else {
@@ -114,13 +132,59 @@
             console.error(error);
             showError('Server connection failed. Please check your network.');
         } finally {
-            // Re-enable button after request is complete
+            // Re-enable button
             submitBtn.disabled = false;
             submitBtn.textContent = "Check In";
             submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
         }
     });
-</script>
 
+    // TASK 2 LOGIC: Campus Geofencing
+    const CAMPUS_LAT = 23.0378; // Latitude for Ahmedabad campus
+    const CAMPUS_LON = 72.5442; // Longitude for Ahmedabad campus
+    const MAX_DISTANCE_KM = 0.2; // Allow check-in within 200 meters
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+
+    function verifyLocation() {
+        const errorBox = document.getElementById('geo-error');
+        const errorText = document.getElementById('geo-error-text');
+
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userLat = position.coords.latitude;
+                    const userLon = position.coords.longitude;
+                    const distance = calculateDistance(CAMPUS_LAT, CAMPUS_LON, userLat, userLon);
+
+                    if (distance > MAX_DISTANCE_KM) {
+                        form.style.display = 'none';
+                        errorBox.classList.remove('hidden');
+                    }
+                },
+                (error) => {
+                    form.style.display = 'none';
+                    errorText.innerText = "Location permission is required for security purposes. Please enable GPS and refresh.";
+                    errorBox.classList.remove('hidden');
+                }
+            );
+        } else {
+            form.style.display = 'none';
+            errorText.innerText = "Your browser does not support geolocation.";
+            errorBox.classList.remove('hidden');
+        }
+    }
+
+    window.onload = verifyLocation;
+</script>
 </body>
 </html>
